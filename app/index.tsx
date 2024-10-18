@@ -1,6 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, Button, StyleSheet, Image } from 'react-native';
-import { RadarChart, PolarGrid, PolarAngleAxis, Radar, PolarRadiusAxis, ResponsiveContainer } from 'recharts';
+import { View, Text, TouchableOpacity, StyleSheet, Image } from 'react-native';
+import {
+  RadarChart,
+  PolarGrid,
+  PolarAngleAxis,
+  Radar,
+  PolarRadiusAxis,
+  ResponsiveContainer,
+  PieChart,
+  Pie,
+  Cell,
+} from 'recharts';
 
 interface RadarData {
   subject: string;
@@ -8,9 +18,21 @@ interface RadarData {
   fullMark: number;
 }
 
+const COLORS = ['#507096', '#E4AC9F', '#BB7F87', '#905A72', '#603B5C', '#2E1E42', '#40456D'];
+
 const App: React.FC = () => {
   const [isBefore, setIsBefore] = useState<boolean>(true);
-  const [data, setData] = useState<RadarData[]>([]);
+  const [radarData, setRadarData] = useState<RadarData[]>([]);
+
+  const staticDonutData: RadarData[] = [
+    { subject: 'Spirituality', A: 50, fullMark: 150 },
+    { subject: 'Money & Finance', A: 50, fullMark: 150 },
+    { subject: 'Career & Growth', A: 50, fullMark: 150 },
+    { subject: 'Health & Fitness', A: 50, fullMark: 150 },
+    { subject: 'Fun & Recreation', A: 50, fullMark: 150 },
+    { subject: 'Personal Development', A: 50, fullMark: 150 },
+    { subject: 'Relationship', A: 50, fullMark: 150 },
+  ];
 
   const generateRandomData = (): RadarData[] => {
     const subjects = ['Spirituality', 'Money & Finance', 'Career & Growth', 'Health & Fitness', 'Fun & Recreation', 'Personal Development', 'Relationship'];
@@ -22,17 +44,17 @@ const App: React.FC = () => {
   };
 
   useEffect(() => {
-    setData(generateRandomData());
+    setRadarData(generateRandomData());
   }, []);
 
   const handleBeforePress = () => {
     setIsBefore(true);
-    setData(generateRandomData());
+    setRadarData(generateRandomData());
   };
 
   const handleAfterPress = () => {
     setIsBefore(false);
-    setData(generateRandomData());
+    setRadarData(generateRandomData());
   };
 
   return (
@@ -40,40 +62,95 @@ const App: React.FC = () => {
       {/* Banner Section */}
       <View style={styles.banner}>
         <Image
-          source={require('../assets/images/bg2.jpg')} 
+          source={require('../assets/images/bg3.jpg')}
           style={styles.bannerImage}
         />
         <Text style={styles.title}>Your Profile</Text>
         <Text style={styles.description}>There is some short description about this card...</Text>
       </View>
 
-      {/* Before and After Buttons */}
-      <View style={styles.buttonContainer}>
-        <View style={styles.buttonWrapper}>
-          <Button title="Before" onPress={handleBeforePress} color={isBefore ? "#81b0ff" : "#767577"} />
+      {/* Container for the content below the banner */}
+      <View style={styles.contentContainer}>
+        <View style={styles.buttonContainer}>
+          <TouchableOpacity
+            onPress={handleBeforePress}
+            style={[styles.button, isBefore && styles.activeButton]}
+          >
+            <Text style={styles.buttonText}>Before</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={handleAfterPress}
+            style={[styles.button, !isBefore && styles.activeButton]}
+          >
+            <Text style={styles.buttonText}>After</Text>
+          </TouchableOpacity>
         </View>
-        <View style={styles.buttonWrapper}>
-          <Button title="After" onPress={handleAfterPress} color={!isBefore ? "#81b0ff" : "#767577"} />
+
+        {/* Donut Chart with Radar inside */}
+        <View style={styles.chartContainer}>
+          <ResponsiveContainer width="100%" height={400}>
+            <PieChart>
+              <Pie
+                data={staticDonutData} 
+                dataKey="A"
+                outerRadius="90%" 
+                innerRadius="50%" 
+                fill="#8884d8"
+                stroke="transparent" 
+                label={({ index }) => (
+                  <Text style={styles.labelText}>{staticDonutData[index].subject}</Text>
+                )}
+              >
+                {staticDonutData.map((entry, index) => (
+                  <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                ))}
+              </Pie>
+            </PieChart>
+          </ResponsiveContainer>
+
+          {/* Radar Chart inside the donut */}
+          <View style={styles.radarChartContainer}>
+            <ResponsiveContainer width="100%" height="100%">
+              <RadarChart cx="50%" cy="50%" outerRadius="40%" data={radarData}>
+                <PolarGrid stroke="transparent" radialLines={false} />
+                <PolarAngleAxis dataKey="subject" stroke="transparent" />
+                <PolarRadiusAxis angle={30} domain={[0, 150]} tick={false} />
+                <Radar 
+                  name="Category" 
+                  dataKey="A" 
+                  stroke="#A77282" 
+                  strokeWidth={3}
+                  fill="none" 
+                  dot={{ stroke: '#white', fill: 'white', r: 4 }} 
+                />
+              </RadarChart>
+            </ResponsiveContainer>
+
+            {/* Adding labels inside the donut chart */}
+            {staticDonutData.map((entry, index) => (
+              <Text
+                key={index}
+                style={[
+                  styles.labelText,
+                  {
+                    position: 'absolute',
+                    left: `${50 + (Math.cos((index * (360 / staticDonutData.length) * Math.PI) / 180) * 40)}%`, 
+                    top: `${50 - (Math.sin((index * (360 / staticDonutData.length) * Math.PI) / 180) * 40)}%`, 
+                    transform: [{ translateX: -50 }, { translateY: -50 }],
+                    color: '#FFFFFF',
+                  },
+                ]}
+              >
+                {entry.subject}
+              </Text>
+            ))}
+          </View>
         </View>
+
+        <TouchableOpacity style={styles.continueButton}>
+          <Text style={styles.buttonText}>Continue</Text>
+        </TouchableOpacity>
       </View>
-
-      {/* Radar Chart */}
-      <ResponsiveContainer width="100%" height={400}>
-        <RadarChart cx="50%" cy="50%" outerRadius="90%" data={data}>
-          <PolarGrid stroke="#ccc" radialLines={false} />
-          <PolarAngleAxis dataKey="subject" stroke="#fff" />
-          <PolarRadiusAxis angle={30} domain={[0, 150]} tick={false} />
-          <Radar 
-            name="Category" 
-            dataKey="A" 
-            stroke="#FF5733"  
-            fillOpacity={0.6} 
-            dot={{ stroke: '#fff', fill: '#fff', r: 4 }} 
-          />
-        </RadarChart>
-      </ResponsiveContainer>
-
-      <Button title="Continue" color="#3D8593"/>
     </View>
   );
 };
@@ -81,50 +158,97 @@ const App: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#181818',
+    backgroundColor: '#1F2932',
     alignItems: 'center',
     justifyContent: 'flex-start',
-    padding: 30,
-  },
-  subjects:{
-    fontFamily: 'Montserrat',
-
+    margin: 0,
+    padding: 0,
   },
   banner: {
     width: '100%',
     alignItems: 'center',
-    marginBottom: 30,
+    margin: 0,
     position: 'relative',
   },
   title: {
     fontSize: 24,
     fontWeight: 'bold',
     color: 'white',
-    position: 'absolute', 
-    top: 20, 
+    position: 'absolute',
+    top: 20,
   },
   description: {
     color: 'white',
     textAlign: 'center',
-    position: 'absolute', 
-    top: 60, 
+    position: 'absolute',
+    top: 60,
   },
   bannerImage: {
     width: '100%',
-    height: 250, 
-    borderRadius: 50,
+    height: 250,
+    borderRadius: 0,
+  },
+  contentContainer: {
+    position: 'absolute',
+    top: 180,
+    left: 0,
+    right: 0,
+    backgroundColor: '#2A2E3A',
+    borderRadius: 20,
+    padding: 15,
+    elevation: 4,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.9, 
+    shadowRadius: 13,  
+  },
+  chartContainer: {
+    position: 'relative',
+    width: '100%',
+    height: 400,
+  },
+  radarChartContainer: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
   },
   buttonContainer: {
     flexDirection: 'row',
-    justifyContent: 'center',
+    justifyContent: 'space-between',
     alignItems: 'center',
     marginVertical: 10,
-    
-  },
-  buttonWrapper: {
-    marginHorizontal: 0,
     width: '100%',
-    marginBottom: 40,
+  },
+  button: {
+    flex: 1,
+    height: 50,
+    backgroundColor: '#2A2E3A',
+    borderRadius: 20,
+    alignItems: 'center',
+    justifyContent: 'center', // Center text vertically
+  },
+  activeButton: {
+    backgroundColor: '#E47F75',
+  },
+  buttonText: {
+    color: 'white',
+    fontWeight: 'bold',
+  },
+  continueButton: {
+    backgroundColor: '#3E6E8E',
+    padding: 10,
+    height: 50,
+    borderRadius: 20,
+    alignItems: 'center',
+    justifyContent: 'center', // Center text vertically
+    marginTop: 10,
+  },
+  labelText: {
+    color: 'white',
+    fontSize: 12,
+    textAlign: 'center',
   },
 });
 
