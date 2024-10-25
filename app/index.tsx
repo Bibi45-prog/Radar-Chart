@@ -1,3 +1,8 @@
+
+
+https://telecom.tm/api/v1/provinces/
+
+
 import React, { useState, useEffect } from "react";
 import { View, Text, TouchableOpacity, StyleSheet, Image } from "react-native";
 import {
@@ -396,3 +401,4 @@ const styles = StyleSheet.create({
 });
 
 export default App;
+
