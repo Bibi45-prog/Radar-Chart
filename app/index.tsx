@@ -1,8 +1,3 @@
-
-
-https://telecom.tm/api/v1/provinces/
-
-
 import React, { useState, useEffect } from "react";
 import { View, Text, TouchableOpacity, StyleSheet, Image } from "react-native";
 import {
@@ -72,7 +67,14 @@ const App: React.FC = () => {
   return (
     <View style={styles.container}>
       <View style={styles.box}>
-        <Icon name="heart" size={30} color="#3C8B98" />
+        <Icon
+          name="heart"
+          size={34}
+          color="#FFFFFF"
+          style={styles.outlineIcon}
+        />
+
+        <Icon name="heart" size={30} color="#3C8B98" style={styles.mainIcon} />
         <Text style={styles.number}>2,250</Text>
       </View>
 
@@ -88,10 +90,9 @@ const App: React.FC = () => {
       </View>
 
       <View style={styles.buttonContainer}>
-        {/* "Before" Button */}
         <TouchableOpacity
           onPress={() => handleTogglePress(true)}
-          style={[styles.button, styles.buttonLeft]} // Apply left-rounded corners
+          style={[styles.button, styles.buttonLeft]}
         >
           <LinearGradient
             colors={isBefore ? ["#834270", "#FF9B77"] : ["#50566E", "#50566E"]}
@@ -102,11 +103,9 @@ const App: React.FC = () => {
             <Text style={styles.buttonText}>Before</Text>
           </LinearGradient>
         </TouchableOpacity>
-
-        {/* "After" Button */}
         <TouchableOpacity
           onPress={() => handleTogglePress(false)}
-          style={[styles.button, styles.buttonRight]} // Apply right-rounded corners
+          style={[styles.button, styles.buttonRight]}
         >
           <LinearGradient
             colors={!isBefore ? ["#834270", "#FF9B77"] : ["#50566E", "#50566E"]}
@@ -119,25 +118,24 @@ const App: React.FC = () => {
         </TouchableOpacity>
       </View>
 
-      {/* Slider */}
-      <View style={styles.sliderContainer}>
-        <Text style={styles.sliderValue}>{sliderValue}%</Text>
-        <View style={styles.trackContainer}>
-          <LinearGradient
-            colors={["#661A68", "#C57246"]}
-            style={[styles.gradient, { width: `${sliderValue}%` }]}
-          />
-          <Slider
-            style={styles.slider}
-            minimumValue={0}
-            maximumValue={100}
-            value={sliderValue}
-            onValueChange={setSliderValue}
-            minimumTrackTintColor="transparent"
-            maximumTrackTintColor="#50566E"
-            thumbTintColor="#ffffff"
-          />
-        </View>
+      <View style={styles.sliderValueContainer}>
+        <Text style={styles.sliderValue}>{sliderValue}% abundant</Text>
+      </View>
+      <View style={styles.trackContainer}>
+        <LinearGradient
+          colors={["#661A68", "#C57246"]}
+          style={[styles.gradient, { width: `${sliderValue}%` }]}
+        />
+        <Slider
+          style={styles.slider}
+          minimumValue={0}
+          maximumValue={100}
+          value={sliderValue}
+          onValueChange={setSliderValue}
+          minimumTrackTintColor="transparent"
+          maximumTrackTintColor="#50566E"
+          thumbTintColor="#ffffff"
+        />
       </View>
 
       {/* Donut Chart with Radar inside */}
@@ -159,14 +157,14 @@ const App: React.FC = () => {
                 const y = cy + radius * Math.sin(-midAngle * RADIAN);
 
                 const label = staticDonutData[index].subject;
-                const words = label.split(" & "); // Split the label by " & "
-                const line1 = words.length > 1 ? words[0] + " &" : words[0]; // Add "&" only if there's more than one word
-                const line2 = words.length > 1 ? words[1] : ""; // Second line (e.g., "Finance" or empty if not available)
+                const words = label.split(" & ");
+                const line1 = words.length > 1 ? words[0] + " &" : words[0];
+                const line2 = words.length > 1 ? words[1] : "";
                 return (
                   <g>
                     <text
                       x={x}
-                      y={y - 10} // Adjust y position for the first line
+                      y={y - 10}
                       fill="white"
                       textAnchor="middle"
                       dominantBaseline="central"
@@ -177,7 +175,7 @@ const App: React.FC = () => {
                     </text>
                     <text
                       x={x}
-                      y={y + 10} // Adjust y position for the second line
+                      y={y + 10}
                       fill="white"
                       textAnchor="middle"
                       dominantBaseline="central"
@@ -240,7 +238,8 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#1F2932",
     alignItems: "center",
-    justifyContent: "flex-start",
+    height: "100%",
+    elevation: 4,
   },
   banner: {
     width: "100%",
@@ -249,23 +248,34 @@ const styles = StyleSheet.create({
   },
   box: {
     position: "absolute",
-    top: 10,
-    right: 10,
+    top: 20,
+    right: 20,
     flexDirection: "row",
     alignItems: "center",
     backgroundColor: "#6A6C78",
-    padding: 8,
-    borderRadius: 60,
+    padding: 5,
+    paddingLeft: 12,
+    paddingRight: 12,
+    borderRadius: 30,
     zIndex: 10,
     elevation: 5,
     shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
+    shadowOffset: { width: 1, height: 4 },
     shadowOpacity: 0.3,
-    shadowRadius: 4,
+    shadowRadius: 3,
   },
+  outlineIcon: {
+    position: "absolute",
+    marginLeft: -2,
+    shadowColor: "#000",
+  },
+  mainIcon: {
+    zIndex: 1,
+  },
+
   number: {
     marginLeft: 10,
-    fontSize: 20,
+    fontSize: 18,
     color: "white",
   },
   title: {
@@ -285,32 +295,17 @@ const styles = StyleSheet.create({
     width: "100%",
     height: 250,
   },
-  contentContainer: {
-    position: "absolute",
-    top: 180,
-    left: 0,
-    right: 0,
-    height: "100%",
-    backgroundColor: "#2A2E3A",
-    borderRadius: 60,
-    padding: 15,
-    elevation: 4,
-    shadowColor: "#000",
-    shadowOffset: { width: 3, height: 6 },
-    shadowOpacity: 40,
-  },
+
   buttonContainer: {
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
     width: "100%",
-    marginTop: 10,
-    paddingLeft: 10,
+    marginTop: 15,
     paddingRight: 10,
   },
   button: {
     flex: 1,
-    borderRadius: 0,
     marginTop: 10,
     justifyContent: "center",
     alignItems: "center",
@@ -323,13 +318,11 @@ const styles = StyleSheet.create({
     marginRight: -12,
     marginLeft: 12,
   },
-
   buttonRight: {
     borderTopLeftRadius: 10,
     borderBottomRightRadius: 10,
     marginLeft: -12,
   },
-
   gradientButton: {
     paddingVertical: 12,
     paddingHorizontal: 20,
@@ -341,26 +334,31 @@ const styles = StyleSheet.create({
   buttonText: {
     color: "white",
     fontSize: 16,
+    fontWeight: 200,
   },
-
   sliderContainer: {
     marginVertical: 20,
     alignItems: "center",
     width: "100%",
-    marginLeft: 10,
-    marginRight: 10,
+  },
+  sliderValueContainer: {
+    backgroundColor: "#AE8565",
+    marginTop: 12,
+    borderRadius: 5,
+    paddingTop: 4,
+    paddingBottom: 4,
+    paddingHorizontal: 5,
+    marginBottom: 8,
   },
   sliderValue: {
     color: "white",
     fontSize: 18,
-    marginBottom: 10,
-    marginLeft: 10,
-    marginRight: 10,
+    fontWeight: 400,
   },
   trackContainer: {
     width: "90%",
     height: 12,
-    borderRadius: 15,
+    borderRadius: 12,
     overflow: "hidden",
     backgroundColor: "#313741",
   },
@@ -369,12 +367,9 @@ const styles = StyleSheet.create({
   },
   slider: {
     width: "100%",
-    height: 40,
-    marginLeft: 10,
-    marginRight: 10,
   },
   chartContainer: {
-    width: "100%",
+    width: "90%",
     height: 400,
     position: "relative",
     justifyContent: "center",
@@ -382,23 +377,18 @@ const styles = StyleSheet.create({
   },
   radarChartContainer: {
     position: "absolute",
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
     alignItems: "center",
     justifyContent: "center",
   },
   continueButton: {
-    borderRadius: 20,
-    marginTop: 30,
+    borderRadius: 30,
+    marginTop: 20,
     paddingVertical: 15,
     paddingHorizontal: 20,
     alignItems: "center",
-    width: "350px", // or use a specific pixel value like '300px'
-    alignSelf: "center", // ensure the button stays centered with the new width
+    width: "350%",
+    alignSelf: "center",
   },
 });
 
 export default App;
-
