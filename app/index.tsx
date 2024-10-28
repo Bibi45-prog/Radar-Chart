@@ -158,13 +158,13 @@ const App: React.FC = () => {
 
                 const label = staticDonutData[index].subject;
                 const words = label.split(" & ");
-                const line1 = words.length > 1 ? words[0] + " &" : words[0];
-                const line2 = words.length > 1 ? words[1] : "";
+                const line1 = words.length > 1 ? words[0] + " &" : words[0]; 
+                const line2 = words.length > 1 ? words[1] : ""; 
                 return (
                   <g>
                     <text
                       x={x}
-                      y={y - 10}
+                      y={y - 10} 
                       fill="white"
                       textAnchor="middle"
                       dominantBaseline="central"
@@ -369,7 +369,7 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   chartContainer: {
-    width: "90%",
+    width: "100%",
     height: 400,
     position: "relative",
     justifyContent: "center",
@@ -377,6 +377,10 @@ const styles = StyleSheet.create({
   },
   radarChartContainer: {
     position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
     alignItems: "center",
     justifyContent: "center",
   },
