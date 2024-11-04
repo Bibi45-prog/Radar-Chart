@@ -1,6 +1,5 @@
-import { Image } from "expo-image";
 import React from "react";
-import { View } from "react-native";
+import { Image, View } from "react-native";
 
 export const HumanState = () => {
   return (
@@ -14,7 +13,7 @@ export const HumanState = () => {
       }}
     >
       <Image
-        source="../assets/images/dummies/man.png"
+        source={require("@/assets/images/dummies/man.png")}
         style={{
           width: "100%",
           height: "100%",

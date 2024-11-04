@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
+import { View, StyleSheet } from "react-native";
 import {
   RadarChart,
   PolarGrid,
@@ -9,8 +9,8 @@ import {
   PieChart,
   Pie,
   Cell,
+  LabelList,
 } from "recharts";
-import { LinearGradient } from "expo-linear-gradient";
 
 interface RadarData {
   subject: string;
@@ -118,8 +118,8 @@ export const ChartState: React.FC = () => {
         <View style={styles.radarChartContainer}>
           <ResponsiveContainer width="100%" height="100%">
             <RadarChart cx="50%" cy="50%" outerRadius="40%" data={radarData}>
-              <PolarGrid stroke="transparent" radialLines={false} />
-              <PolarAngleAxis dataKey="subject" stroke="transparent" />
+              {/* <PolarGrid stroke="transparent" radialLines={false} /> */}
+              {/* <PolarAngleAxis dataKey="subject" stroke="transparent" /> */}
               <Radar
                 name="Category"
                 dataKey="A"
