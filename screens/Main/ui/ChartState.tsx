@@ -1,12 +1,5 @@
 import React, { useState, useEffect } from "react";
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  StyleSheet,
-  Image,
-  ScrollView,
-} from "react-native";
+import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import {
   RadarChart,
   PolarGrid,
@@ -18,10 +11,6 @@ import {
   Cell,
 } from "recharts";
 import { LinearGradient } from "expo-linear-gradient";
-import Slider from "@react-native-community/slider";
-import Icon from "react-native-vector-icons/FontAwesome";
-import { useFonts } from "expo-font";
-import { Main } from "../screens/Main";
 
 interface RadarData {
   subject: string;
@@ -49,14 +38,8 @@ const staticDonutData: RadarData[] = [
   { subject: "Relationship", A: 50, fullMark: 150 },
 ];
 
-const App: React.FC = () => {
-  const [isBefore, setIsBefore] = useState<boolean>(true);
+export const ChartState: React.FC = () => {
   const [radarData, setRadarData] = useState<RadarData[]>([]);
-  const [sliderValue, setSliderValue] = useState<number>(0);
-  const [isLoaded] = useFonts({
-    "axf-ligth": require("@/assets/fonts/Axiforma-Light.ttf"),
-    "axf-medium": require("@/assets/fonts/Axiforma-Medium.ttf"),
-  });
 
   const generateRandomData = (): RadarData[] => {
     return staticDonutData.map((data) => ({
@@ -69,90 +52,8 @@ const App: React.FC = () => {
     setRadarData(generateRandomData());
   }, []);
 
-  const handleTogglePress = (before: boolean) => {
-    setIsBefore(before);
-    setTimeout(() => {
-      setRadarData(generateRandomData());
-    }, 600);
-    setSliderValue(before ? 50 : 100);
-  };
-
-  return <Main />;
-
   return (
     <View style={styles.container}>
-      <View style={styles.box}>
-        <Icon
-          name="heart"
-          size={34}
-          color="#FFFFFF"
-          style={styles.outlineIcon}
-        />
-
-        <Icon name="heart" size={30} color="#3C8B98" style={styles.mainIcon} />
-        <Text style={styles.number}>2,250</Text>
-      </View>
-
-      <View style={styles.banner}>
-        <Image
-          source={require("../assets/images/bg3.jpg")}
-          style={styles.bannerImage}
-        />
-        <Text style={styles.title}>Your Profile</Text>
-        <Text style={styles.description}>
-          There is some short description about this card...
-        </Text>
-      </View>
-
-      <View style={styles.buttonContainer}>
-        <TouchableOpacity
-          onPress={() => handleTogglePress(true)}
-          style={[styles.button, styles.buttonLeft]}
-        >
-          <LinearGradient
-            colors={isBefore ? ["#834270", "#FF9B77"] : ["#50566E", "#50566E"]}
-            style={styles.gradientButton}
-            start={{ x: 0, y: 0 }}
-            end={{ x: 1, y: 0 }}
-          >
-            <Text style={styles.buttonText}>Before</Text>
-          </LinearGradient>
-        </TouchableOpacity>
-        <TouchableOpacity
-          onPress={() => handleTogglePress(false)}
-          style={[styles.button, styles.buttonRight]}
-        >
-          <LinearGradient
-            colors={!isBefore ? ["#834270", "#FF9B77"] : ["#50566E", "#50566E"]}
-            style={styles.gradientButton}
-            start={{ x: 0, y: 0 }}
-            end={{ x: 1, y: 0 }}
-          >
-            <Text style={styles.buttonText}>After</Text>
-          </LinearGradient>
-        </TouchableOpacity>
-      </View>
-
-      <View style={styles.sliderValueContainer}>
-        <Text style={styles.sliderValue}>{sliderValue}% abundant</Text>
-      </View>
-      <View style={styles.trackContainer}>
-        <LinearGradient
-          colors={["#661A68", "#C57246"]}
-          style={[styles.gradient, { width: `${sliderValue}%` }]}
-        />
-        <Slider
-          style={styles.slider}
-          minimumValue={0}
-          maximumValue={100}
-          value={sliderValue}
-          onValueChange={setSliderValue}
-          minimumTrackTintColor="transparent"
-          maximumTrackTintColor="#50566E"
-          thumbTintColor="#ffffff"
-        />
-      </View>
-
       {/* Donut Chart with Radar inside */}
       <View style={styles.chartContainer}>
         <ResponsiveContainer width="100%" height={400}>
@@ -233,17 +134,6 @@ const App: React.FC = () => {
           </ResponsiveContainer>
         </View>
       </View>
-
-      <TouchableOpacity>
-        <LinearGradient
-          colors={["#5cc9c2", "#508bbf"]}
-          start={{ x: 0, y: 0 }}
-          end={{ x: 1, y: 0 }}
-          style={styles.continueButton}
-        >
-          <Text style={styles.buttonText}>Continue</Text>
-        </LinearGradient>
-      </TouchableOpacity>
     </View>
   );
 };
@@ -251,10 +141,18 @@ const App: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#1F2932",
+    // backgroundColor: "#1F2932",
     alignItems: "center",
-    height: "100%",
+    width: "85%",
+    // height: "100%",
     elevation: 4,
+    marginLeft: "auto",
+    marginRight: "auto",
+    transform: [
+      {
+        scale: 1,
+      },
+    ],
   },
   banner: {
     width: "100%",
@@ -409,5 +307,3 @@ const styles = StyleSheet.create({
     alignSelf: "center",
   },
 });
-
-export default App;
