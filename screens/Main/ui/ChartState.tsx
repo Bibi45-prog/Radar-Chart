@@ -27,15 +27,14 @@ const COLORS = [
   "#2E1E42",
   "#40456D",
 ];
-
 const staticDonutData: RadarData[] = [
-  { subject: "Spirituality", A: 50, fullMark: 150 },
-  { subject: "Money & Finance", A: 50, fullMark: 150 },
-  { subject: "Career & Growth", A: 50, fullMark: 150 },
-  { subject: "Health & Fitness", A: 50, fullMark: 150 },
-  { subject: "Fun & Recreation", A: 50, fullMark: 150 },
-  { subject: "Personal Development", A: 50, fullMark: 150 },
-  { subject: "Relationship", A: 50, fullMark: 150 },
+  { subject: "Гибкость", A: 50, fullMark: 150 },
+  { subject: "Сила", A: 50, fullMark: 150 },
+  { subject: "Знания", A: 50, fullMark: 150 },
+  { subject: "Дыхание", A: 50, fullMark: 150 },
+  { subject: "Равновесие", A: 50, fullMark: 150 },
+  { subject: "Духовность", A: 50, fullMark: 150 },
+  { subject: "Эмоции", A: 50, fullMark: 150 },
 ];
 
 export const ChartState: React.FC = () => {
@@ -68,7 +67,7 @@ export const ChartState: React.FC = () => {
               labelLine={false}
               label={({ index, midAngle, outerRadius, cx, cy }) => {
                 const RADIAN = Math.PI / 180;
-                const radius = outerRadius * 0.79;
+                const radius = outerRadius * 0.75;
                 const x = cx + radius * Math.cos(-midAngle * RADIAN);
                 const y = cy + radius * Math.sin(-midAngle * RADIAN);
 
@@ -80,11 +79,11 @@ export const ChartState: React.FC = () => {
                   <g>
                     <text
                       x={x}
-                      y={y - 10}
+                      y={y}
                       fill="white"
                       textAnchor="middle"
                       dominantBaseline="central"
-                      fontSize={10}
+                      fontSize={13}
                       fontFamily="Arial"
                     >
                       {line1}
@@ -141,13 +140,11 @@ export const ChartState: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    // backgroundColor: "#1F2932",
     alignItems: "center",
-    width: "85%",
-    // height: "100%",
-    elevation: 4,
+    width: 330,
     marginLeft: "auto",
     marginRight: "auto",
+    marginTop: 20,
     transform: [
       {
         scale: 1,
